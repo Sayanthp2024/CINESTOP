@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CineStop — The Rebellious Underground Cinema Magazine & Modern Movie Platform.">
+
+    <title>CineStop — Rebellious Underground Cinema Magazine 🟢💥</title>
+
+    <!-- Google Fonts: Bebas Neue, Bangers, Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Toxic Pop Stylesheet & SVG Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💥</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= TOXIC POP STICKY HEADER ================= -->
+<header class="toxic-header">
+    <div class="header-container">
+        
+        <!-- Brand Logo -->
+        <a class="brand-logo" onclick="showPage('home')">
+            <span class="brand-icon">🎬</span>
+            <div class="brand-title-wrap">
+                <div class="brand-title">CINE<span>STOP</span></div>
+                <span class="brand-tag">UNDERGROUND CINEMA ZINE 💥</span>
+            </div>
+        </a>
+
+        <!-- Main Navigation Links -->
+        <nav id="mainNav">
+            <a href="#" class="active" onclick="showPage('home')">Home</a>
+            <a href="#" onclick="showPage('movies')">Movies</a>
+            <a href="#" onclick="showPage('genres')">Genres</a>
+            <a href="#" onclick="showPage('watchlist')">Watchlist <span class="nav-badge" id="navWatchlistBadge"></span></a>
+            <a href="#" onclick="showPage('favorites')">Favorites <span class="nav-badge fav" id="navFavBadge"></span></a>
+            <a href="#" onclick="showPage('reviews')">Reviews</a>
+            <a href="#" onclick="showPage('recommendations')">Picks For You</a>
+        </nav>
+
+        <!-- Right Nav Actions -->
+        <div class="nav-actions">
+            <!-- Comic Search Input -->
+            <div class="toxic-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="text"
+                    id="navbarSearch"
+                    placeholder="Search movies..."
+                    onkeyup="searchMovies()"
+                >
+            </div>
+
+            <!-- Profile & Admin Buttons -->
+            <button class="nav-action-btn" onclick="showPage('profile')" title="My Profile">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </button>
+
+            <button class="nav-action-btn hq-btn" onclick="showPage('admin')" title="Admin Panel">
+                <i class="fa-solid fa-gear"></i>
+                <span>Admin</span>
+            </button>
+
+            <button class="nav-action-btn menu-btn" onclick="toggleMenu()" title="Open Menu" aria-label="Open navigation menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+    </div>
+</header>
+
+<!-- ================= MOBILE MENU DRAWER ================= -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="showPage('home'); toggleMenu()">🏠 Home</a>
+    <a href="#" onclick="showPage('movies'); toggleMenu()">🎬 Movies</a>
+    <a href="#" onclick="showPage('genres'); toggleMenu()">💥 Genres</a>
+    <a href="#" onclick="showPage('watchlist'); toggleMenu()">🎯 Watchlist</a>
+    <a href="#" onclick="showPage('favorites'); toggleMenu()">❤️ Favorites</a>
+    <a href="#" onclick="showPage('reviews'); toggleMenu()">💬 Reviews</a>
+    <a href="#" onclick="showPage('recommendations'); toggleMenu()">⭐ Picks For You</a>
+    <a href="#" onclick="showPage('profile'); toggleMenu()">👤 My Profile</a>
+    <a href="#" onclick="showPage('admin'); toggleMenu()">⚙️ Admin Panel</a>
+</div>
+
+<!-- ================= MAIN EDITORIAL CONTAINER ================= -->
+<main>
+
+    <!-- ================= HOME (TOXIC POP HOME) ================= -->
+    <section id="home" class="page active">
+        
+        <!-- DRAMATIC TOXIC HERO -->
+        <div id="heroFeatureArea"></div>
+
+        <!-- MOOD DISCOVERY: WHAT'S YOUR VIBE? -->
+        <div class="vibe-box">
+            <div class="vibe-header">
+                <h2>WHAT'S YOUR VIBE? 😎</h2>
+                <span>CHOOSE YOUR MOOD CHAOS</span>
+            </div>
+
+            <div class="vibe-buttons-grid">
+                <button class="vibe-btn active" onclick="pickVibe('hype', event)">
+                    <span>🔥</span> HYPE
+                </button>
+                <button class="vibe-btn" onclick="pickVibe('chill', event)">
+                    <span>😎</span> CHILL
+                </button>
+                <button class="vibe-btn" onclick="pickVibe('romantic', event)">
+                    <span>❤️</span> ROMANTIC
+                </button>
+                <button class="vibe-btn" onclick="pickVibe('terrified', event)">
+                    <span>😱</span> TERRIFIED
+                </button>
+                <button class="vibe-btn" onclick="pickVibe('think', event)">
+                    <span>🧠</span> THINK
+                </button>
+                <button class="vibe-btn" onclick="pickVibe('cry', event)">
+                    <span>😭</span> CRY
+                </button>
+            </div>
+
+            <!-- Vibe Dynamic Banner -->
+            <div class="vibe-banner show" id="vibeBanner">
+                <span>YOUR VIBE → <strong>TOTAL HYPE MODE 🔥</strong></span> · Full-throttle action spectacles, high kicks, explosions, and cosmic battles!
+            </div>
+
+            <!-- Vibe Results Grid -->
+            <div class="movie-grid" id="vibeResultsGrid"></div>
+        </div>
+
+        <!-- WHAT'S HOT? (TRENDING SECTION) -->
+        <section style="margin-bottom: 50px;">
+            <div class="section-toxic-header">
+                <div>
+                    <span class="section-toxic-kicker">EXPLOSIVE RETURNS 🔥</span>
+                    <h2 class="section-toxic-title">WHAT'S HOT?</h2>
+                    <span class="section-toxic-desc">Ranked by sheer cinematic velocity and cult adoration</span>
+                </div>
+                <button class="section-toxic-btn" onclick="showPage('movies')">
+                    BROWSE ALL VAULT →
+                </button>
+            </div>
+
+            <!-- Numbered Ranking Box -->
+            <div class="hot-ranking-box" id="hotRankingList"></div>
+
+            <!-- Comic Cards Grid -->
+            <div class="movie-grid" id="trendingCards"></div>
+        </section>
+
+        <!-- PICK YOUR CHAOS (GENRE STICKERS) -->
+        <section style="margin-bottom: 50px;">
+            <div class="section-toxic-header">
+                <div>
+                    <span class="section-toxic-kicker">GENRE STICKERS 💥</span>
+                    <h2 class="section-toxic-title">PICK YOUR CHAOS</h2>
+                    <span class="section-toxic-desc">Smash any genre sticker to unleash that specific brand of madness</span>
+                </div>
+            </div>
+
+            <div class="chaos-grid">
+                <div class="chaos-card" onclick="filterGenre('Action')">
+                    <span class="comic-emoji">💥</span>
+                    <h3>ACTION</h3>
+                    <p>Fists, explosions & adrenaline rushes</p>
+                </div>
+                <div class="chaos-card" onclick="filterGenre('Animation')">
+                    <span class="comic-emoji">🧸</span>
+                    <h3>ANIMATION</h3>
+                    <p>Halftone multiverses & visual magic</p>
+                </div>
+                <div class="chaos-card" onclick="filterGenre('Comedy')">
+                    <span class="comic-emoji">😂</span>
+                    <h3>COMEDY</h3>
+                    <p>Unfiltered satire & riotous laughs</p>
+                </div>
+                <div class="chaos-card" onclick="filterGenre('Drama')">
+                    <span class="comic-emoji">🎭</span>
+                    <h3>DRAMA</h3>
+                    <p>Gritty character studies & raw tension</p>
+                </div>
+                <div class="chaos-card" onclick="filterGenre('Sci-Fi')">
+                    <span class="comic-emoji">🚀</span>
+                    <h3>SCI-FI</h3>
+                    <p>Cosmic wormholes & cybernetic nightmares</p>
+                </div>
+                <div class="chaos-card" onclick="filterGenre('Adventure')">
+                    <span class="comic-emoji">🗺️</span>
+                    <h3>ADVENTURE</h3>
+                    <p>Grand odysseys into wild frontiers</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- POPULAR FLICKS -->
+        <section style="margin-bottom: 50px;">
+            <div class="section-toxic-header">
+                <div>
+                    <span class="section-toxic-kicker">CROWD FAVORITES ⚡</span>
+                    <h2 class="section-toxic-title">POPULAR FLICKS</h2>
+                    <span class="section-toxic-desc">The movies getting played on repeat in the underground</span>
+                </div>
+                <button class="section-toxic-btn" onclick="showPage('movies')">
+                    MORE HITS →
+                </button>
+            </div>
+
+            <div class="movie-grid" id="popularCards"></div>
+        </section>
+
+        <!-- MASTERPIECE VAULT -->
+        <section style="margin-bottom: 50px;">
+            <div class="section-toxic-header">
+                <div>
+                    <span class="section-toxic-kicker">CULT CLASSICS 🏆</span>
+                    <h2 class="section-toxic-title">HALL OF OBSESSIONS</h2>
+                    <span class="section-toxic-desc">Highest rated masterworks etched in cinematic neon</span>
+                </div>
+            </div>
+
+            <div class="movie-grid" id="topRatedCards"></div>
+        </section>
+
+    </section>
+
+    <!-- ================= MOVIES (FIND YOUR NEXT OBSESSION) ================= -->
+    <section id="movies" class="page">
+        
+        <div class="section-toxic-header">
+            <div>
+                <span class="section-toxic-kicker">REPERTORY VAULT 🔍</span>
+                <h1 class="section-toxic-title">FIND YOUR NEXT OBSESSION</h1>
+                <span class="section-toxic-desc">Filter through our entire underground database of cult celluloid.</span>
+            </div>
+        </div>
+
+        <div class="search-hero-box">
+            <div class="filter-grid">
+                <div class="toxic-input-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        type="text"
+                        id="movieSearch"
+                        placeholder="Search title, director, or keyword..."
+                        onkeyup="searchMoviesPage()"
+                    >
+                </div>
+
+                <select id="genreFilter" class="toxic-select" onchange="filterMovies()">
+                    <option value="">ALL CHAOS GENRES</option>
+                    <option value="Action">Action</option>
+                    <option value="Animation">Animation</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Adventure">Adventure</option>
+                </select>
+
+                <select id="yearFilter" class="toxic-select" onchange="filterMovies()">
+                    <option value="">ALL YEARS</option>
+                </select>
+
+                <select id="sortFilter" class="toxic-select" onchange="filterMovies()">
+                    <option value="rating">HIGHEST RATED (★)</option>
+                    <option value="year">RELEASE YEAR (NEWEST)</option>
+                    <option value="title">TITLE (A TO Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="results-stats-strip">
+            <span id="archiveCount">VAULT CONTAINS: 12 REPERTORY TITLES</span>
+            <span>TOXIC PROTOCOL: ACTIVE 🟢</span>
+        </div>
+
+        <div class="movie-grid" id="allMovies"></div>
+
+    </section>
+
+    <!-- ================= GENRES (PICK YOUR CHAOS) ================= -->
+    <section id="genres" class="page">
+        
+        <div class="section-toxic-header">
+            <div>
+                <span class="section-toxic-kicker">CATEGORIES 💥</span>
+                <h1 class="section-toxic-title">PICK YOUR CHAOS</h1>
+                <span class="section-toxic-desc">Smash any genre to load its dedicated movie panel list.</span>
+            </div>
+        </div>
+
+        <div class="chaos-grid">
+            <div class="chaos-card" onclick="filterGenre('Action')">
+                <span class="comic-emoji">💥</span>
+                <h3>ACTION</h3>
+                <p>Fists, explosions & adrenaline rushes</p>
+                <div style="font-family:var(--font-heading); color:var(--toxic-green); font-size:18px; margin-top:8px;">EXPLORE →</div>
+            </div>
+            <div class="chaos-card" onclick="filterGenre('Animation')">
+                <span class="comic-emoji">🧸</span>
+                <h3>ANIMATION</h3>
+                <p>Halftone multiverses & visual magic</p>
+                <div style="font-family:var(--font-heading); color:var(--toxic-green); font-size:18px; margin-top:8px;">EXPLORE →</div>
+            </div>
+            <div class="chaos-card" onclick="filterGenre('Comedy')">
+                <span class="comic-emoji">😂</span>
+                <h3>COMEDY</h3>
+                <p>Unfiltered satire & riotous laughs</p>
+                <div style="font-family:var(--font-heading); color:var(--toxic-green); font-size:18px; margin-top:8px;">EXPLORE →</div>
+            </div>
+            <div class="chaos-card" onclick="filterGenre('Drama')">
+                <span class="comic-emoji">🎭</span>
+                <h3>DRAMA</h3>
+                <p>Gritty character studies & raw tension</p>
+                <div style="font-family:var(--font-heading); color:var(--toxic-green); font-size:18px; margin-top:8px;">EXPLORE →</div>
+            </div>
+            <div class="chaos-card" onclick="filterGenre('Sci-Fi')">
+                <span class="comic-emoji">🚀</span>
+                <h3>SCI-FI</h3>
+                <p>Cosmic wormholes & cybernetic nightmares</p>
+                <div style="font-family:var(--font-heading); color:var(--toxic-green); font-size:18px; margin-top:8px;">EXPLORE →</div>
+            </div>
+            <div class="chaos-card" onclick="filterGenre('Adventure')">
+                <span class="comic-emoji">🗺️</span>
+                <h3>ADVENTURE</h3>
+                <p>Grand odysseys into wild frontiers</p>
+                <div style="font-family:var(--font-heading); color:var(--toxic-green); font-size:18px; margin-top:8px;">EXPLORE →</div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ================= WATCHLIST ================= -->
+    <section id="watchlist" class="page">
+        
+        <div class="section-toxic-header">
+            <div>
+                <span class="section-toxic-kicker">SAVED TO WATCH 🎯</span>
+                <h1 class="section-toxic-title">MY WATCHLIST</h1>
+                <span class="section-toxic-desc">Movies you've saved to watch. Tap any card to open details.</span>
+            </div>
+            <button class="section-toxic-btn" onclick="showPage('movies')">
+                + ADD MORE MOVIES
+            </button>
+        </div>
+
+        <div class="movie-grid" id="watchlistMovies"></div>
+
+    </section>
+
+    <!-- ================= FAVORITES ================= -->
+    <section id="favorites" class="page">
+        
+        <div class="section-toxic-header">
+            <div>
+                <span class="section-toxic-kicker">YOUR FAVORITES ❤️</span>
+                <h1 class="section-toxic-title">MY FAVORITES</h1>
+                <span class="section-toxic-desc">Movies you've hearted. Tap the ❤️ on any movie to add it here.</span>
+            </div>
+            <button class="section-toxic-btn" onclick="showPage('movies')">
+                BROWSE MORE MOVIES →
+            </button>
+        </div>
+
+        <div class="movie-grid" id="favoriteMovies"></div>
+
+    </section>
+
+    <!-- ================= RECOMMENDATIONS ================= -->
+    <section id="recommendations" class="page">
+        
+        <div class="section-toxic-header">
+            <div>
+                <span class="section-toxic-kicker">CURATED FOR YOU ⭐</span>
+                <h1 class="section-toxic-title">PICKS FOR YOU</h1>
+                <span class="section-toxic-desc">Top-rated movies hand-picked by our algorithm — sorted by critic score.</span>
+            </div>
+        </div>
+
+        <div class="movie-grid" id="recommendedMovies"></div>
+
+    </section>
+
+    <!-- ================= RATINGS & REVIEWS ================= -->
+    <section id="reviews" class="page">
+        
+        <div class="section-toxic-header">
+            <div>
+                <span class="section-toxic-kicker">MOVIE REVIEWS 💬</span>
+                <h1 class="section-toxic-title">REVIEWS & RATINGS</h1>
+                <span class="section-toxic-desc">Write a review or read what others think. Select a movie, rate it, and share your thoughts.</span>
+            </div>
+        </div>
+
+        <div class="reviews-layout">
+            
+            <!-- Left: Submit Review Card -->
+            <div class="review-composer-card">
+                <h2>WRITE A REVIEW</h2>
+                <p>Pick a movie, choose your star rating, and share your honest opinion.</p>
+
+                <div class="review-composer-form">
+                    <label class="ux-label">1. Select a movie</label>
+                    <select id="reviewMovie">
+                        <option value="">-- Choose a movie --</option>
+                    </select>
+
+                    <label class="ux-label">2. Your rating</label>
+                    <div class="comic-stars" role="group" aria-label="Star rating">
+                        <span onclick="setRating(1)" title="1 star">★</span>
+                        <span onclick="setRating(2)" title="2 stars">★</span>
+                        <span onclick="setRating(3)" title="3 stars">★</span>
+                        <span onclick="setRating(4)" title="4 stars">★</span>
+                        <span onclick="setRating(5)" title="5 stars">★</span>
+                    </div>
+                    <span class="rating-hint" id="ratingHint">Click a star to rate</span>
+
+                    <label class="ux-label">3. Your review</label>
+                    <textarea
+                        id="reviewText"
+                        placeholder="What did you think? (min. 10 characters)"
+                    ></textarea>
+
+                    <button class="btn primary full" onclick="submitReview()">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        SUBMIT REVIEW
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Published Reviews -->
+            <div>
+                <div class="section-toxic-header" style="margin-bottom:16px;">
+                    <div>
+                        <span class="section-toxic-kicker">COMMUNITY REVIEWS</span>
+                        <h2 style="font-family:var(--font-heading); font-size:32px;">WHAT OTHERS SAID</h2>
+                    </div>
+                </div>
+
+                <div class="comic-bubbles-wrap" id="userReviews"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= PROFILE ================= -->
+    <section id="profile" class="page">
+        
+        <div class="section-toxic-header" style="max-width:1100px; margin: 0 auto 30px;">
+            <div>
+                <span class="section-toxic-kicker">YOUR ACCOUNT 👤</span>
+                <h1 class="section-toxic-title">MY PROFILE</h1>
+                <span class="section-toxic-desc">Your profile info and activity statistics.</span>
+            </div>
+        </div>
+
+        <div class="dossier-layout">
+            
+            <div class="dossier-card">
+                <div class="dossier-avatar">
+                    🥷
+                </div>
+
+                <h1>Alex Johnson</h1>
+                <p>alex@cinestop.cinema</p>
+
+                <div class="comic-sticker green" style="margin-bottom:20px;">
+                    MEMBER SINCE 2024
+                </div>
+
+                <button class="btn secondary full" onclick="showToast('Profile editing coming soon! 🟢')">
+                    EDIT PROFILE
+                </button>
+            </div>
+
+            <div class="dossier-info">
+                <h2>ABOUT ME</h2>
+                <p>
+                    Film enthusiast obsessed with great cinema — from action spectacles and animated masterworks to mind-bending sci-fi and powerful dramas.
+                </p>
+
+                <h2>FAVOURITE GENRES</h2>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 24px;">
+                    <span class="comic-sticker green">Animation</span>
+                    <span class="comic-sticker orange">Sci-Fi</span>
+                    <span class="comic-sticker pink">Action</span>
+                    <span class="comic-sticker white">Drama</span>
+                </div>
+
+                <h2>MY ACTIVITY</h2>
+                <div class="dossier-stats-grid">
+                    <div class="dossier-stat">
+                        <strong id="ratedCount">2</strong>
+                        <span>REVIEWS WRITTEN</span>
+                    </div>
+
+                    <div class="dossier-stat">
+                        <strong id="favoriteCount">0</strong>
+                        <span>FAVORITES SAVED</span>
+                    </div>
+
+                    <div class="dossier-stat">
+                        <strong id="watchlistCount">0</strong>
+                        <span>ON WATCHLIST</span>
+                    </div>
+                </div>
+
+                <button class="btn danger" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    LOG OUT
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= LOGIN ================= -->
+    <section id="login" class="page auth-page">
+        
+        <div class="auth-comic-box">
+            <div class="auth-logo">
+                🎬 CINE<span>STOP</span>
+            </div>
+
+            <h1>SIGN IN</h1>
+            <p>Welcome back! Enter your details to continue.</p>
+
+            <label class="ux-label">Email address</label>
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="your@email.com"
+                value="rebel@cinestop.cinema"
+                autocomplete="email"
+            >
+
+            <label class="ux-label">Password</label>
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Your password"
+                value="toxic123"
+                autocomplete="current-password"
+            >
+
+            <button class="btn primary full" style="margin-top:10px;" onclick="login()">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                SIGN IN
+            </button>
+
+            <p style="margin-top:20px; font-family:var(--font-comic); font-size:18px;">
+                Don't have an account?
+                <a href="#" style="color:var(--toxic-green); text-decoration:underline;" onclick="showPage('register')">Create one →</a>
+            </p>
+        </div>
+
+    </section>
+
+    <!-- ================= REGISTER ================= -->
+    <section id="register" class="page auth-page">
+        
+        <div class="auth-comic-box">
+            <div class="auth-logo">
+                🎬 CINE<span>STOP</span>
+            </div>
+
+            <h1>CREATE ACCOUNT</h1>
+            <p>Join CineStop — discover, save, and review great cinema.</p>
+
+            <label class="ux-label">Your name</label>
+            <input
+                type="text"
+                placeholder="e.g. Alex Johnson"
+                id="registerName"
+                autocomplete="name"
+            >
+
+            <label class="ux-label">Email address</label>
+            <input
+                type="email"
+                placeholder="your@email.com"
+                id="registerEmail"
+                autocomplete="email"
+            >
+
+            <label class="ux-label">Choose a password</label>
+            <input
+                type="password"
+                placeholder="At least 6 characters"
+                id="registerPassword"
+                autocomplete="new-password"
+            >
+
+            <button class="btn primary full" style="margin-top:10px;" onclick="register()">
+                <i class="fa-solid fa-user-plus"></i>
+                CREATE MY ACCOUNT
+            </button>
+
+            <p style="margin-top:20px; font-family:var(--font-comic); font-size:18px;">
+                Already have an account?
+                <a href="#" style="color:var(--toxic-green); text-decoration:underline;" onclick="showPage('login')">Sign in →</a>
+            </p>
+        </div>
+
+    </section>
+
+    <!-- ================= MOVIE DETAILS (COMIC POSTER FEATURE) ================= -->
+    <section id="details" class="page">
+        <div id="movieDetails"></div>
+    </section>
+
+    <!-- ================= ADMIN (UNDERGROUND HQ) ================= -->
+    <section id="admin" class="page">
+        
+        <div class="admin-layout">
+            
+            <aside class="admin-sidebar">
+                <div class="admin-logo">
+                    ⚙️ ADMIN PANEL
+                </div>
+
+                <a class="active">📊 Movie Catalog</a>
+                <a onclick="openAddMovie()">➕ Add New Movie</a>
+                <a onclick="showPage('reviews')">💬 Reviews</a>
+                <a onclick="showPage('home')">🏠 Back to Site</a>
+            </aside>
+
+            <div class="admin-content">
+                
+                <div class="admin-header">
+                    <div>
+                        <span class="section-toxic-kicker">MOVIE MANAGEMENT</span>
+                        <h1 style="font-family:var(--font-heading); font-size:36px; letter-spacing:1px;">MOVIE CATALOG</h1>
+                    </div>
+
+                    <button class="btn primary" onclick="openAddMovie()">
+                        <i class="fa-solid fa-plus"></i> ADD NEW MOVIE
+                    </button>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="dashboard-card">
+                        <span>🎬</span>
+                        <div>
+                            <strong id="adminTotalMovies">12</strong>
+                            <p>TOTAL MOVIES</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <span>🎯</span>
+                        <div>
+                            <strong id="adminWatchlistCount">0</strong>
+                            <p>WATCHLIST SAVES</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <span>💬</span>
+                        <div>
+                            <strong id="adminReviewCount">0</strong>
+                            <p>REVIEWS WRITTEN</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-table-box">
+                    <div class="table-header">
+                        <h2>CATALOG DISPATCHES</h2>
+                        <input
+                            type="text"
+                            id="adminSearchInput"
+                            placeholder="Filter movies..."
+                        >
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>TITLE & DIRECTION</th>
+                                <th>GENRE</th>
+                                <th>YEAR</th>
+                                <th>RATING</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminMovieTable"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- ================= TRAILER MODAL ================= -->
+<div class="modal" id="trailerModal" onclick="handleModalBackdropClick(event, 'trailerModal', closeTrailer)">
+    <div class="modal-content">
+        <button class="close" onclick="closeTrailer()" title="Close (Esc)">×</button>
+        <h2 id="trailerMovieTitle">NOW PLAYING 🎬</h2>
+        <div class="video-frame-wrap" id="trailerFrameContainer"></div>
+    </div>
+</div>
+
+<!-- ================= ADD MOVIE MODAL ================= -->
+<div class="modal" id="addMovieModal" onclick="handleModalBackdropClick(event, 'addMovieModal', closeAddMovie)">
+    <div class="modal-content">
+        <button class="close" onclick="closeAddMovie()" title="Close">×</button>
+        <h2>➕ ADD NEW MOVIE</h2>
+        <p style="font-family:var(--font-body); font-size:15px; color:var(--text-muted); margin-bottom:14px;">
+            Fill in the details below to add a new movie to the catalog.
+        </p>
+
+        <label class="ux-label">Movie Title <span style="color:#E52E2E">*</span></label>
+        <input type="text" id="newTitle" placeholder="e.g. Blade Runner 2049">
+
+        <label class="ux-label">Release Year <span style="color:#E52E2E">*</span></label>
+        <input type="number" id="newYear" placeholder="e.g. 2024" min="1900" max="2030">
+
+        <label class="ux-label">Genre <span style="color:#E52E2E">*</span></label>
+        <input type="text" id="newGenre" placeholder="e.g. Sci-Fi, Action, Drama">
+
+        <label class="ux-label">Rating (1–10) <span style="color:#E52E2E">*</span></label>
+        <input type="text" id="newRating" placeholder="e.g. 8.6">
+
+        <label class="ux-label">Emoji Icon (optional fallback)</label>
+        <input type="text" id="newPoster" placeholder="e.g. 🎬">
+
+        <label class="ux-label">Poster Image URL (optional)</label>
+        <input type="text" id="newPosterUrl" placeholder="https://...">
+
+        <button class="btn primary full" style="margin-top:14px;" onclick="addMovie()">
+            <i class="fa-solid fa-plus"></i> ADD MOVIE TO CATALOG
+        </button>
+    </div>
+</div>
+
+<!-- ================= TOAST NOTIFICATION ================= -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+    💥 Action confirmed!
+</div>
+
+<!-- ================= BACK TO TOP BUTTON ================= -->
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top" aria-label="Scroll back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+    <div class="footer-logo">
+        🎬 CINE<span>STOP</span>
+    </div>
+
+    <p class="footer-tagline">
+        The Rebellious Underground Cinema Magazine & Repertory Platform • Published Daily
+    </p>
+
+    <div class="footer-nav-links">
+        <a href="#" onclick="showPage('home')">Home</a>
+        <span>•</span>
+        <a href="#" onclick="showPage('movies')">Movies</a>
+        <span>•</span>
+        <a href="#" onclick="showPage('genres')">Genres</a>
+        <span>•</span>
+        <a href="#" onclick="showPage('watchlist')">Watchlist</a>
+        <span>•</span>
+        <a href="#" onclick="showPage('favorites')">Favorites</a>
+        <span>•</span>
+        <a href="#" onclick="showPage('reviews')">Reviews</a>
+        <span>•</span>
+        <a href="#" onclick="showPage('admin')">Admin</a>
+    </div>
+
+    <p class="footer-copy">
+        Crafted for CineStop with 🟢 Toxic Green & 💥 Energy. B.Tech Web Application Project.
+    </p>
+</footer>
+
+<!-- Application Logic -->
+<script src="script.js"></script>
+
+</body>
+</html>
