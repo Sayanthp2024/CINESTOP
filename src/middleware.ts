@@ -6,7 +6,7 @@ export default withAuth(
     const token = req.nextauth.token;
     const path = req.nextUrl.pathname;
 
-    // Isolate the admin: Only users with the 'admin' role can access the /admin route
+    // Admin routes require admin role
     if (path.startsWith('/admin')) {
       if (token?.role !== 'admin') {
         return NextResponse.redirect(new URL('/', req.url));
@@ -15,26 +15,34 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token, // Requires the user to be logged in for all matched routes
+      authorized: ({ token, req }) => {
+        const path = req.nextUrl.pathname;
+        // Protected routes require valid login token
+        if (
+          path.startsWith('/admin') ||
+          path.startsWith('/watchlist') ||
+          path.startsWith('/favorites') ||
+          path.startsWith('/profile') ||
+          path.startsWith('/recommendations')
+        ) {
+          return !!token;
+        }
+        return true;
+      },
     },
     pages: {
-      signIn: '/login', // Redirect unauthenticated users to our custom login page
+      signIn: '/login',
     },
   }
 );
 
-// Protect all routes except login, register, public files, and api auth routes
+// Only intercept genuinely protected routes so public browsing and public movie APIs are never blocked
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - login
-     * - register
-     * - api/auth
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!login|register|api/auth|_next/static|_next/image|favicon.ico).*)',
+    '/admin/:path*',
+    '/watchlist/:path*',
+    '/favorites/:path*',
+    '/profile/:path*',
+    '/recommendations/:path*',
   ],
 };

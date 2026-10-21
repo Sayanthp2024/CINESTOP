@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import connectMongo from '@/lib/mongodb';
 import User from '@/models/User';
 import { fetchFromTMDB } from '@/lib/tmdb';
+
+import CustomMovie from '@/models/Movie';
 
 // POST: Add or remove a movie from watchlist/favorites
 export async function POST(request: Request) {
@@ -25,12 +27,13 @@ export async function POST(request: Request) {
     const user = await User.findOne({ email: session.user.email });
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
+    const numId = Number(movieId);
     const list = user[listType];
 
-    if (action === 'add' && !list.includes(movieId)) {
-      list.push(movieId);
+    if (action === 'add' && !list.includes(numId)) {
+      list.push(numId);
     } else if (action === 'remove') {
-      user[listType] = list.filter((id: number) => id !== movieId);
+      user[listType] = list.filter((id: number) => id !== numId);
     }
 
     await user.save();
@@ -62,14 +65,22 @@ export async function GET(request: Request) {
 
     const movieIds = user[listType];
     
-    // Fetch full movie details from TMDB in parallel
+    // Fetch full movie details from TMDB in parallel with CustomMovie fallback
     const movies = await Promise.all(
       movieIds.map(async (id: number) => {
         try {
-          return await fetchFromTMDB(`/movie/${id}`, {});
-        } catch (e) {
-          return null; // Skip if TMDB fails for one movie
+          const tmdbMovie = await fetchFromTMDB(`/movie/${id}`, {});
+          if (tmdbMovie && tmdbMovie.title) return tmdbMovie;
+        } catch {
+          // Check MongoDB for custom injected movies
         }
+        try {
+          const custom = await CustomMovie.findOne({ id }).lean();
+          if (custom) return custom;
+        } catch {
+          // ignore
+        }
+        return null;
       })
     );
 

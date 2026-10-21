@@ -22,12 +22,12 @@ function LoginContent() {
 
     const res = await signIn('credentials', {
       redirect: false,
-      email,
+      email: email.trim(),
       password,
     });
 
     if (res?.error) {
-      setError('Invalid credentials. Access denied.');
+      setError('Invalid credentials or MongoDB connection issue. Check credentials.');
       setLoading(false);
     } else {
       // Fetch session to check role
@@ -43,8 +43,14 @@ function LoginContent() {
     }
   };
 
+  const fillCredentials = (userEmail: string, userPass: string) => {
+    setEmail(userEmail);
+    setPassword(userPass);
+    setError('');
+  };
+
   return (
-    <div className="comic-modal-content" style={{ width: '100%', maxWidth: '500px', padding: '40px' }}>
+    <div className="comic-modal-content" style={{ width: '100%', maxWidth: '520px', padding: '35px' }}>
       
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2 className="modal-title">ACCESS VAULT</h2>
@@ -87,6 +93,40 @@ function LoginContent() {
         </button>
       </form>
 
+      {/* SAMPLE DEMO LOGINS QUICK-FILL */}
+      <div style={{ marginTop: '30px', padding: '18px', background: 'var(--charcoal-card)', border: 'var(--border-thick)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--cyber-yellow, #ffe600)' }}>
+            ⚡ SAMPLE TEST ACCOUNTS
+          </span>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Click to auto-fill</span>
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+          <button 
+            type="button" 
+            className="btn orange" 
+            style={{ flex: 1, padding: '8px', fontSize: '12px' }}
+            onClick={() => fillCredentials('admin@cinestop.com', 'admin123')}
+          >
+            🛡️ Admin (HQ)
+          </button>
+          <button 
+            type="button" 
+            className="btn pink" 
+            style={{ flex: 1, padding: '8px', fontSize: '12px' }}
+            onClick={() => fillCredentials('user@cinestop.com', 'user123')}
+          >
+            👤 Sample User
+          </button>
+        </div>
+
+        <div style={{ marginTop: '12px', fontSize: '11px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+          • <strong>Admin:</strong> <code>admin@cinestop.com</code> / <code>admin123</code> (Full access to /admin)<br />
+          • <strong>User:</strong> <code>user@cinestop.com</code> / <code>user123</code> (Access to Watchlist & Favorites)
+        </div>
+      </div>
+
       <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px', color: 'var(--text-muted)' }}>
         NEED AN ACCOUNT?{' '}
         <Link href="/register" style={{ color: 'var(--hot-pink)', fontWeight: 'bold', textDecoration: 'underline' }}>
@@ -99,7 +139,7 @@ function LoginContent() {
 
 export default function Login() {
   return (
-    <section className="page active" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+    <section className="page active" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', padding: '20px' }}>
       <Suspense fallback={<div style={{ color: 'var(--toxic-green)' }}>LOADING SECURITY MODULE...</div>}>
         <LoginContent />
       </Suspense>

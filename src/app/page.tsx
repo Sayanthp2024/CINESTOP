@@ -40,32 +40,32 @@ export default function Home() {
         </div>
 
         <div className="chaos-grid">
-          <Link href="/genres?q=Action" className="chaos-card">
+          <Link href="/movies?q=Action" className="chaos-card">
             <span className="comic-emoji">💥</span>
             <h3>ACTION</h3>
             <p>Fists, explosions & adrenaline rushes</p>
           </Link>
-          <Link href="/genres?q=Animation" className="chaos-card">
+          <Link href="/movies?q=Animation" className="chaos-card">
             <span className="comic-emoji">🧸</span>
             <h3>ANIMATION</h3>
             <p>Halftone multiverses & visual magic</p>
           </Link>
-          <Link href="/genres?q=Comedy" className="chaos-card">
+          <Link href="/movies?q=Comedy" className="chaos-card">
             <span className="comic-emoji">😂</span>
             <h3>COMEDY</h3>
             <p>Unfiltered satire & riotous laughs</p>
           </Link>
-          <Link href="/genres?q=Drama" className="chaos-card">
+          <Link href="/movies?q=Drama" className="chaos-card">
             <span className="comic-emoji">🎭</span>
             <h3>DRAMA</h3>
             <p>Gritty character studies & raw tension</p>
           </Link>
-          <Link href="/genres?q=Sci-Fi" className="chaos-card">
+          <Link href="/movies?q=Sci-Fi" className="chaos-card">
             <span className="comic-emoji">🚀</span>
             <h3>SCI-FI</h3>
             <p>Cosmic wormholes & cybernetic nightmares</p>
           </Link>
-          <Link href="/genres?q=Adventure" className="chaos-card">
+          <Link href="/movies?q=Adventure" className="chaos-card">
             <span className="comic-emoji">🗺️</span>
             <h3>ADVENTURE</h3>
             <p>Grand odysseys into wild frontiers</p>

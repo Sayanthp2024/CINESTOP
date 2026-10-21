@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Providers from '@/components/Providers';
+import CineBot from '@/components/CineBot';
 
 export const metadata: Metadata = {
   title: 'CineStop - Toxic Pop Cinema',
@@ -27,6 +28,8 @@ export default function RootLayout({
           <Navbar />
           {/* Main Content */}
           <main id="mainContent">{children}</main>
+          {/* Floating AI Movie Suggestion Bot */}
+          <CineBot />
         </Providers>
       </body>
     </html>

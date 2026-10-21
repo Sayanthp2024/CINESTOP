@@ -99,11 +99,11 @@ export default function DynamicMovieGrid({ defaultQuery = '', customEndpoint = '
               <span className="rating">★ {movie.vote_average?.toFixed(1) || 'N/A'}</span>
               <span className="year">{movie.release_date?.split('-')[0] || 'N/A'}</span>
             </div>
-            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-              <button className="btn orange full" style={{ flex: 1, padding: '10px 5px', fontSize: '12px' }} onClick={() => addToHitList(movie.id)}>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+              <button className="btn orange full" style={{ flex: 1, padding: '8px 4px', fontSize: '11px' }} onClick={() => addToHitList(movie.id)}>
                 + HIT LIST
               </button>
-              <button className="btn pink full" style={{ flex: 1, padding: '10px 5px', fontSize: '12px' }} onClick={async () => {
+              <button className="btn pink full" style={{ flex: 1, padding: '8px 4px', fontSize: '11px' }} onClick={async () => {
                 try {
                   const res = await fetch('/api/user/movies', {
                     method: 'POST',
@@ -122,6 +122,24 @@ export default function DynamicMovieGrid({ defaultQuery = '', customEndpoint = '
               }}>
                 ❤️ OBSESS
               </button>
+            </div>
+            <div style={{ marginTop: '8px' }}>
+              <Link 
+                href={`/movie/${movie.id}#trailer-theater`}
+                style={{ 
+                  display: 'block', 
+                  textAlign: 'center', 
+                  fontSize: '11px', 
+                  fontWeight: 'bold', 
+                  color: 'var(--toxic-green)', 
+                  background: 'rgba(0,0,0,0.7)', 
+                  padding: '6px', 
+                  border: '1px solid var(--toxic-green)',
+                  textDecoration: 'none' 
+                }}
+              >
+                ▶ TRAILER & WHERE TO STREAM 📡
+              </Link>
             </div>
           </div>
         </div>

@@ -8,11 +8,15 @@ export async function GET() {
     const data = await fetchFromTMDB('/movie/popular', { language: 'en-US', page: '1' });
     
     // Inject Custom Vault Movies from MongoDB
-    await connectMongo();
-    const customMovies = await CustomMovie.find().lean();
-    
-    // Merge them at the very top of the list!
-    data.results = [...customMovies, ...data.results];
+    try {
+      await connectMongo();
+      const customMovies = await CustomMovie.find().lean();
+      if (customMovies && customMovies.length > 0 && data?.results) {
+        data.results = [...customMovies, ...data.results];
+      }
+    } catch (dbErr: any) {
+      console.warn('MongoDB popular custom movies fetch skipped:', dbErr?.message);
+    }
 
     return NextResponse.json(data);
   } catch (error: any) {

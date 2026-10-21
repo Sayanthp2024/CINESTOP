@@ -11,26 +11,26 @@ export async function GET(request: Request) {
     let data: any;
 
     if (!query) {
-      // If no query, just return popular movies
       data = await fetchFromTMDB('/movie/popular', { language: 'en-US', page: '1' });
     } else {
-      // Search TMDB
       data = await fetchFromTMDB('/search/movie', { query, language: 'en-US', page: '1' });
     }
 
     // Inject Custom Vault Movies from MongoDB
-    await connectMongo();
-    let customMovies = [];
-    
-    if (!query) {
-      customMovies = await CustomMovie.find().lean();
-    } else {
-      customMovies = await CustomMovie.find({ title: { $regex: query, $options: 'i' } }).lean();
-    }
-    
-    // Merge them at the very top of the search results
-    if (data && data.results) {
-      data.results = [...customMovies, ...data.results];
+    try {
+      await connectMongo();
+      let customMovies = [];
+      if (!query) {
+        customMovies = await CustomMovie.find().lean();
+      } else {
+        customMovies = await CustomMovie.find({ title: { $regex: query, $options: 'i' } }).lean();
+      }
+      
+      if (data && data.results && customMovies && customMovies.length > 0) {
+        data.results = [...customMovies, ...data.results];
+      }
+    } catch (dbErr: any) {
+      console.warn('MongoDB search custom movies fetch skipped:', dbErr?.message);
     }
 
     return NextResponse.json(data);

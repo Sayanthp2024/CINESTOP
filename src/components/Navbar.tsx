@@ -34,6 +34,7 @@ export default function Navbar() {
             <Link href="/favorites" className={pathname === '/favorites' ? 'active' : ''}>Favorites <span className="nav-badge fav" id="navFavBadge"></span></Link>
             <Link href="/reviews" className={pathname === '/reviews' ? 'active' : ''}>Reviews</Link>
             <Link href="/recommendations" className={pathname === '/recommendations' ? 'active' : ''}>Picks For You</Link>
+            <Link href="/chatbot" className={pathname === '/chatbot' ? 'active' : ''} style={{ color: 'var(--toxic-green)', fontWeight: 'bold' }}>Cine-Bot 🤖</Link>
           </nav>
 
           <div className="nav-actions">
@@ -81,6 +82,7 @@ export default function Navbar() {
         <Link href="/favorites" onClick={toggleMenu}>❤️ Favorites</Link>
         <Link href="/reviews" onClick={toggleMenu}>💬 Reviews</Link>
         <Link href="/recommendations" onClick={toggleMenu}>⭐ Picks For You</Link>
+        <Link href="/chatbot" onClick={toggleMenu} style={{ color: 'var(--toxic-green)' }}>🤖 Cine-Bot AI</Link>
         <Link href="/profile" onClick={toggleMenu}>👤 My Profile</Link>
         <Link href="/admin" onClick={toggleMenu}>⚙️ Admin Panel</Link>
       </div>
