@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -56,15 +56,36 @@ export default function Navbar() {
               />
             </form>
 
-            <Link href="/profile" className="nav-action-btn" title="My Profile">
-              <i className="fa-solid fa-user"></i>
-              <span>Profile</span>
-            </Link>
+            {session?.user ? (
+              <>
+                <Link href="/profile" className="nav-action-btn" title="My Profile">
+                  <i className="fa-solid fa-user"></i>
+                  <span>{session.user.name?.split(' ')[0] || 'Profile'}</span>
+                </Link>
 
-            <Link href="/admin" className="nav-action-btn hq-btn" title="Admin Panel">
-              <i className="fa-solid fa-gear"></i>
-              <span>Admin</span>
-            </Link>
+                {(session.user as any)?.role === 'admin' && (
+                  <Link href="/admin" className="nav-action-btn hq-btn" title="Admin Panel">
+                    <i className="fa-solid fa-gear"></i>
+                    <span>Admin</span>
+                  </Link>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: '/login' })}
+                  className="nav-action-btn"
+                  title="Sign Out"
+                  style={{ background: 'transparent', cursor: 'pointer' }}
+                >
+                  <i className="fa-solid fa-arrow-right-from-bracket" style={{ color: 'var(--hot-pink)' }}></i>
+                  <span>Exit</span>
+                </button>
+              </>
+            ) : (
+              <Link href="/login" className="btn orange" style={{ fontSize: '12px', padding: '8px 16px', textDecoration: 'none' }}>
+                <i className="fa-solid fa-key" style={{ marginRight: '6px' }}></i> LOGIN
+              </Link>
+            )}
 
             <button className="nav-action-btn menu-btn" onClick={toggleMenu} title="Open Menu" aria-label="Open navigation menu">
               <i className="fa-solid fa-bars"></i>
@@ -83,8 +104,25 @@ export default function Navbar() {
         <Link href="/reviews" onClick={toggleMenu}>💬 Reviews</Link>
         <Link href="/recommendations" onClick={toggleMenu}>⭐ Picks For You</Link>
         <Link href="/chatbot" onClick={toggleMenu} style={{ color: 'var(--toxic-green)' }}>🤖 Cine-Bot AI</Link>
-        <Link href="/profile" onClick={toggleMenu}>👤 My Profile</Link>
-        <Link href="/admin" onClick={toggleMenu}>⚙️ Admin Panel</Link>
+        {session?.user ? (
+          <>
+            <Link href="/profile" onClick={toggleMenu}>👤 Profile ({session.user.name})</Link>
+            {(session.user as any)?.role === 'admin' && (
+              <Link href="/admin" onClick={toggleMenu}>⚙️ Admin Panel</Link>
+            )}
+            <button
+              onClick={() => { toggleMenu(); signOut({ callbackUrl: '/login' }); }}
+              style={{ background: 'none', border: 'none', color: 'var(--hot-pink)', textAlign: 'left', padding: '12px 20px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}
+            >
+              🚪 Sign Out
+            </button>
+          </>
+        ) : (
+          <>
+            <Link href="/login" onClick={toggleMenu} style={{ color: 'var(--cyber-yellow, #ffe600)', fontWeight: 'bold' }}>🔑 Sign In / Login</Link>
+            <Link href="/register" onClick={toggleMenu}>⚡ Register New Account</Link>
+          </>
+        )}
       </div>
     </>
   );

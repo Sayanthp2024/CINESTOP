@@ -19,6 +19,7 @@ async function run() {
     mongoose.connection.on('error', err => console.error('Mongoose connection error:', err));
     console.log("Connecting with mongoose (forcing IPv4)...");
     await mongoose.connect(uri, {
+      dbName: 'cinestop',
       serverSelectionTimeoutMS: 15000,
       family: 4,
     });

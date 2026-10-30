@@ -4,6 +4,22 @@ import { authOptions } from '@/lib/auth';
 import connectMongo from '@/lib/mongodb';
 import CustomMovie from '@/models/Movie';
 
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as any).role !== 'admin') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectMongo();
+    const movies = await CustomMovie.find().sort({ release_date: -1 }).lean();
+    return NextResponse.json({ movies });
+  } catch (error) {
+    console.error('Admin Fetch Movies Error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);

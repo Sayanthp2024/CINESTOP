@@ -49,7 +49,7 @@ export default function PopularFlicks() {
             <span className="comic-sticker green">Popular</span>
             <h3 className="movie-title">{movie.title}</h3>
             <div className="movie-meta">
-              <span className="rating">★ {movie.vote_average.toFixed(1)}</span>
+              <span className="rating">★ {movie.vote_average?.toFixed(1) || 'N/A'}</span>
               <span className="year">{movie.release_date?.split('-')[0]}</span>
             </div>
           </div>

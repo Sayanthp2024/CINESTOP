@@ -97,6 +97,23 @@ export default function AdminPanel() {
     }
   };
 
+  const handleDeleteUser = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete user "${name}" from MongoDB?`)) return;
+
+    try {
+      const res = await fetch(`/api/admin/users?id=${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (res.ok) {
+        setUsers(users.filter(u => u._id !== id));
+        alert('User deleted successfully.');
+      } else {
+        alert(data.error || 'Failed to delete user');
+      }
+    } catch {
+      alert('Error connecting to database');
+    }
+  };
+
   const handleSaveAdminKey = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!adminKey.trim() || savingKey) return;
@@ -410,6 +427,7 @@ export default function AdminPanel() {
                 <th style={{ padding: '12px 8px' }}>WATCHLIST</th>
                 <th style={{ padding: '12px 8px' }}>FAVORITES</th>
                 <th style={{ padding: '12px 8px' }}>JOINED</th>
+                <th style={{ padding: '12px 8px' }}>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -433,6 +451,16 @@ export default function AdminPanel() {
                   <td style={{ padding: '12px 8px' }}>{u.favorites?.length || 0}</td>
                   <td style={{ padding: '12px 8px', color: 'var(--text-muted)', fontSize: '12px' }}>
                     {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}
+                  </td>
+                  <td style={{ padding: '12px 8px' }}>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteUser(u._id, u.name)}
+                      className="btn pink"
+                      style={{ fontSize: '11px', padding: '6px 12px' }}
+                    >
+                      DELETE
+                    </button>
                   </td>
                 </tr>
               ))}

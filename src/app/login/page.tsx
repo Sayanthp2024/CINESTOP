@@ -35,11 +35,10 @@ function LoginContent() {
       const sessionData = await sessionRes.json();
       
       if (sessionData?.user?.role === 'admin') {
-        router.push('/admin');
+        window.location.href = '/admin';
       } else {
-        router.push('/');
+        window.location.href = '/';
       }
-      router.refresh();
     }
   };
 

@@ -1,7 +1,11 @@
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
-export async function fetchFromTMDB(endpoint: string, queryParams: Record<string, string> = {}, retries = 3) {
+// In-memory response cache to eliminate redundant network delays and speed up page loads
+const cache = new Map<string, { data: any; timestamp: number }>();
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes cache
+
+export async function fetchFromTMDB(endpoint: string, queryParams: Record<string, string> = {}, retries = 2) {
   if (!TMDB_API_KEY) {
     throw new Error('TMDB_API_KEY is not defined in the environment variables');
   }
@@ -13,17 +17,32 @@ export async function fetchFromTMDB(endpoint: string, queryParams: Record<string
     url.searchParams.append(key, queryParams[key]);
   });
 
+  const cacheKey = url.toString();
+  const cached = cache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+    return cached.data;
+  }
+
   for (let i = 0; i < retries; i++) {
     try {
-      const response = await fetch(url.toString());
+      const response = await fetch(url.toString(), {
+        signal: AbortSignal.timeout(5000), // 5 second timeout to prevent blocking
+      });
       if (response.ok) {
-        return await response.json();
+        const data = await response.json();
+        cache.set(cacheKey, { data, timestamp: Date.now() });
+        return data;
       }
     } catch (e) {
-      // Network error, will retry
+      // Network error or timeout, will retry
     }
     // Wait a bit before retrying
-    await new Promise(res => setTimeout(res, 500));
+    await new Promise(res => setTimeout(res, 300));
+  }
+
+  // Return stale cache if available upon total failure
+  if (cached) {
+    return cached.data;
   }
 
   throw new Error(`Failed to fetch from TMDB after ${retries} retries`);

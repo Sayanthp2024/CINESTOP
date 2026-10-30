@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     const trimmedKey = apiKey.trim();
 
     // Verify key against Google Gemini API with a fast ping across modern models
-    const testModels = ['gemini-3.5-flash', 'gemini-3.6-flash', 'gemini-flash-lite-latest', 'gemini-1.5-flash'];
+    const testModels = ['gemini-3.5-flash', 'gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-3.6-flash'];
     let verified = false;
     let lastErrorMsg = '';
 

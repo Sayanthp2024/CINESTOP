@@ -62,12 +62,11 @@ async function callGeminiAI(userPrompt: string, apiKey: string) {
   // Support verified working models in order of preference
   const models = [
     'gemini-3.5-flash',
-    'gemini-3.6-flash',
+    'gemini-flash-latest',
     'gemini-flash-lite-latest',
+    'gemini-3.6-flash',
     'gemini-3.5-flash-lite',
     'gemini-3.7-flash',
-    'gemini-flash-latest',
-    'gemini-1.5-flash',
   ];
   let lastError: any = null;
 
@@ -167,7 +166,7 @@ export async function POST(request: Request) {
       try {
         const geminiResult = await callGeminiAI(cleanMsg, effectiveGeminiKey);
         botCommentary = geminiResult.reply || 'Vault neural net deciphered your request:';
-        modelUsed = geminiResult.modelUsed || 'gemini-1.5-flash';
+        modelUsed = geminiResult.modelUsed || 'gemini-3.5-flash';
 
         if (geminiResult.recommendations && Array.isArray(geminiResult.recommendations)) {
           // Hydrate each Gemini movie title with TMDB data (posters, trailers, ratings)

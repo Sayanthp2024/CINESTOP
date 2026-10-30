@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface MovieSuggestion {
@@ -56,9 +56,9 @@ export default function ChatbotPage() {
     }
   };
 
-  useState(() => {
+  useEffect(() => {
     checkGemini();
-  });
+  }, []);
 
   const handleSaveGeminiKey = async (e: React.FormEvent) => {
     e.preventDefault();
